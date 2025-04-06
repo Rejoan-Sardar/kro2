@@ -1,0 +1,54 @@
+name: Performance Benchmarks
+
+on:
+  workflow_dispatch:  # Allow manual triggering
+  push:
+    branches:
+      - main
+    paths:
+      - 'pkg/performance/**'
+      - '.github/workflows/performance-benchmarks.yaml'
+  pull_request:
+    paths:
+      - 'pkg/performance/**'
+
+jobs:
+  benchmark:
+    name: Run KRO Performance Benchmarks
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Go
+        uses: actions/setup-go@v4
+        with:
+          go-version: '1.19'
+
+      - name: Install dependencies
+        run: |
+          go mod download
+
+      - name: Run basic benchmarks
+        run: |
+          cd pkg/performance
+          go run simple_cli.go benchmark
+        
+      - name: Run analysis
+        run: |
+          cd pkg/performance
+          go run simple_cli.go analyze
+          
+      - name: Generate visualizations
+        run: |
+          cd pkg/performance
+          go run simple_cli.go visualize
+          
+      - name: Store benchmark results
+        uses: actions/upload-artifact@v3
+        with:
+          name: performance-results
+          path: |
+            pkg/performance/benchmark_results.json
+            pkg/performance/analysis_report.json
+            pkg/performance/visualizations/
