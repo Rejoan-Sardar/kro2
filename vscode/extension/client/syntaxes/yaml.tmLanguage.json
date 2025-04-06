@@ -1,0 +1,290 @@
+{
+  "name": "YAML with Kro Extensions",
+  "scopeName": "source.yaml",
+  "fileTypes": ["yaml", "yml", "kro"],
+  "patterns": [
+    {
+      "include": "#comment"
+    },
+    {
+      "include": "#property"
+    },
+    {
+      "include": "#kro-cel-expression"
+    },
+    {
+      "include": "#string"
+    },
+    {
+      "include": "#constants"
+    },
+    {
+      "include": "#numeric"
+    },
+    {
+      "include": "#array"
+    },
+    {
+      "include": "#object"
+    }
+  ],
+  "repository": {
+    "comment": {
+      "match": "(?:^|\\G)(\\s*)((#).*$\\n?)",
+      "captures": {
+        "1": {
+          "name": "punctuation.whitespace.comment.leading.yaml"
+        },
+        "2": {
+          "name": "comment.line.number-sign.yaml"
+        },
+        "3": {
+          "name": "punctuation.definition.comment.yaml"
+        }
+      }
+    },
+    "property": {
+      "patterns": [
+        {
+          "begin": "(?:^|\\G)(\\s*)(?:(-)\\s+)?([^{\\[\\]}\\s]+?)\\s*(:)(?=\\s|$)",
+          "beginCaptures": {
+            "1": {
+              "name": "punctuation.whitespace.property.leading.yaml"
+            },
+            "2": {
+              "name": "punctuation.definition.block.sequence.item.yaml"
+            },
+            "3": {
+              "name": "entity.name.tag.yaml"
+            },
+            "4": {
+              "name": "punctuation.separator.key-value.mapping.yaml"
+            }
+          },
+          "end": "(?=\\s*$|\\s+\\#|\\s*[\\}\\]\\s]*$|\\s*\\n)",
+          "patterns": [
+            {
+              "include": "#comment"
+            },
+            {
+              "include": "#string"
+            },
+            {
+              "include": "#constants"
+            },
+            {
+              "include": "#numeric"
+            },
+            {
+              "include": "#array"
+            },
+            {
+              "include": "#object"
+            },
+            {
+              "include": "#kro-cel-expression"
+            }
+          ]
+        }
+      ]
+    },
+    "string": {
+      "patterns": [
+        {
+          "name": "string.quoted.single.yaml",
+          "begin": "'",
+          "end": "'",
+          "patterns": [
+            {
+              "name": "constant.character.escape.yaml",
+              "match": "''"
+            }
+          ]
+        },
+        {
+          "name": "string.quoted.double.yaml",
+          "begin": "\"",
+          "end": "\"",
+          "patterns": [
+            {
+              "name": "constant.character.escape.yaml",
+              "match": "\\\\([0abtnvfre\"\\\\/]|x[0-9A-Fa-f]{2}|u[0-9A-Fa-f]{4}|U[0-9A-Fa-f]{8})"
+            }
+          ]
+        }
+      ]
+    },
+    "constants": {
+      "patterns": [
+        {
+          "match": "(?:^|\\G)(\\s*)(?:(-)|(?:(-\\s*)?(true|false|True|False|TRUE|FALSE|null|Null|NULL|~)|(y|Y|yes|Yes|YES|n|N|no|No|NO|on|On|ON|off|Off|OFF)))(?=\\s*$|\\s+\\#)",
+          "captures": {
+            "1": {
+              "name": "punctuation.whitespace.scalar.leading.yaml"
+            },
+            "2": {
+              "name": "punctuation.definition.block.sequence.item.yaml"
+            },
+            "3": {
+              "name": "punctuation.definition.block.sequence.item.yaml"
+            },
+            "4": {
+              "name": "constant.language.yaml"
+            },
+            "5": {
+              "name": "constant.language.yaml"
+            }
+          }
+        }
+      ]
+    },
+    "numeric": {
+      "patterns": [
+        {
+          "name": "constant.numeric.integer.yaml",
+          "match": "(?:^|\\G)(\\s*)(?:(-)|(?:(-\\s*)?((0|[1-9][0-9]*)|0o[0-7]+|0x[0-9a-fA-F]+|[-+]?[1-9][0-9]*(?:\\.[0-9]*)?(?:[eE][-+]?[0-9]+)?|[-+]?\\.[0-9]+(?:[eE][-+]?[0-9]+)?)))(?=\\s*$|\\s+\\#)",
+          "captures": {
+            "1": {
+              "name": "punctuation.whitespace.scalar.leading.yaml"
+            },
+            "2": {
+              "name": "punctuation.definition.block.sequence.item.yaml"
+            },
+            "3": {
+              "name": "punctuation.definition.block.sequence.item.yaml"
+            },
+            "4": {
+              "name": "constant.numeric.integer.yaml"
+            }
+          }
+        }
+      ]
+    },
+    "array": {
+      "begin": "(\\[)",
+      "beginCaptures": {
+        "1": {
+          "name": "punctuation.definition.sequence.begin.yaml"
+        }
+      },
+      "end": "(\\])",
+      "endCaptures": {
+        "1": {
+          "name": "punctuation.definition.sequence.end.yaml"
+        }
+      },
+      "patterns": [
+        {
+          "include": "#comment"
+        },
+        {
+          "include": "#string"
+        },
+        {
+          "include": "#constants"
+        },
+        {
+          "include": "#numeric"
+        },
+        {
+          "include": "#array"
+        },
+        {
+          "include": "#object"
+        },
+        {
+          "include": "#kro-cel-expression"
+        }
+      ]
+    },
+    "object": {
+      "begin": "(\\{)",
+      "beginCaptures": {
+        "1": {
+          "name": "punctuation.definition.mapping.begin.yaml"
+        }
+      },
+      "end": "(\\})",
+      "endCaptures": {
+        "1": {
+          "name": "punctuation.definition.mapping.end.yaml"
+        }
+      },
+      "patterns": [
+        {
+          "include": "#comment"
+        },
+        {
+          "include": "#property"
+        }
+      ]
+    },
+    "kro-cel-expression": {
+      "begin": "(\\{\\{)",
+      "beginCaptures": {
+        "1": {
+          "name": "keyword.operator.cel.begin.yaml"
+        }
+      },
+      "end": "(\\}\\})",
+      "endCaptures": {
+        "1": {
+          "name": "keyword.operator.cel.end.yaml"
+        }
+      },
+      "contentName": "source.cel",
+      "patterns": [
+        {
+          "match": "[a-zA-Z_][a-zA-Z0-9_]*",
+          "name": "variable.other.cel"
+        },
+        {
+          "match": "\\b(true|false|null)\\b",
+          "name": "constant.language.cel"
+        },
+        {
+          "match": "\\b(int|uint|double|bool|string|bytes|list|map|null_type|type)\\b",
+          "name": "support.type.cel"
+        },
+        {
+          "match": "\\b(in|as)\\b",
+          "name": "keyword.operator.cel"
+        },
+        {
+          "match": "[0-9]+(\\.[0-9]+)?([eE][+-]?[0-9]+)?",
+          "name": "constant.numeric.cel"
+        },
+        {
+          "begin": "\"",
+          "end": "\"",
+          "name": "string.quoted.double.cel",
+          "patterns": [
+            {
+              "match": "\\\\.",
+              "name": "constant.character.escape.cel"
+            }
+          ]
+        },
+        {
+          "begin": "'",
+          "end": "'",
+          "name": "string.quoted.single.cel",
+          "patterns": [
+            {
+              "match": "\\\\.",
+              "name": "constant.character.escape.cel"
+            }
+          ]
+        },
+        {
+          "match": "\\.",
+          "name": "punctuation.accessor.cel"
+        },
+        {
+          "match": "[\\+\\-\\*/%&|^~<>=!?:]+",
+          "name": "keyword.operator.cel"
+        }
+      ]
+    }
+  }
+}

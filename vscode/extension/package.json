@@ -1,0 +1,81 @@
+{
+  "name": "kro-language-extension",
+  "displayName": "Kro ResourceGraphDefinition",
+  "description": "Language support for Kro ResourceGraphDefinitions",
+  "version": "0.1.0",
+  "publisher": "kro.run",
+  "license": "Apache-2.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/kro-run/kro"
+  },
+  "engines": {
+    "vscode": "^1.74.0"
+  },
+  "categories": [
+    "Programming Languages",
+    "Linters",
+    "Snippets"
+  ],
+  "keywords": [
+    "kro",
+    "kubernetes",
+    "resource",
+    "graph",
+    "yaml"
+  ],
+  "activationEvents": [
+    "onLanguage:yaml",
+    "onLanguage:kro"
+  ],
+  "main": "./client/out/extension.js",
+  "contributes": {
+    "languages": [
+      {
+        "id": "kro",
+        "aliases": ["Kro ResourceGraphDefinition", "kro"],
+        "extensions": [".kro"],
+        "configuration": "./client/language-configuration.json"
+      }
+    ],
+    "grammars": [
+      {
+        "language": "kro",
+        "scopeName": "source.kro",
+        "path": "./client/syntaxes/kro.tmLanguage.json"
+      }
+    ],
+    "configuration": {
+      "type": "object",
+      "title": "Kro ResourceGraphDefinition",
+      "properties": {
+        "kroLanguageServer.maxNumberOfProblems": {
+          "scope": "resource",
+          "type": "number",
+          "default": 100,
+          "description": "Controls the maximum number of problems produced by the server."
+        },
+        "kroLanguageServer.trace.server": {
+          "scope": "window",
+          "type": "string",
+          "enum": ["off", "messages", "verbose"],
+          "default": "off",
+          "description": "Traces the communication between VS Code and the language server."
+        },
+        "kroLanguageServer.debug": {
+          "scope": "window",
+          "type": "boolean",
+          "default": false,
+          "description": "Enable debug logging for the language server."
+        }
+      }
+    }
+  },
+  "scripts": {
+    "vscode:prepublish": "cd client && npm run vscode:prepublish",
+    "compile": "cd client && npm run compile",
+    "watch": "cd client && npm run watch",
+    "postinstall": "cd client && npm install",
+    "package": "vsce package"
+  }
+}
