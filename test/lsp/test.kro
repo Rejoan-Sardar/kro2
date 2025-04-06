@@ -1,0 +1,34 @@
+apiVersion: kro.run/v1alpha1
+kind: ResourceGraphDefinition
+metadata:
+  name: test-graph
+spec:
+  resources:
+    simpleResource:
+      type: Service
+      description: "A simple Kubernetes service"
+      api: "v1"
+      template:
+        apiVersion: v1
+        kind: Service
+        metadata:
+          name: my-service
+        spec:
+          selector:
+            app: {{ params.appName }}
+          ports:
+            - port: {{ params.port }}
+              targetPort: {{ params.targetPort }}
+  parameters:
+    appName:
+      type: string
+      description: "Name of the application"
+      required: true
+    port:
+      type: integer
+      description: "Service port"
+      default: 80
+    targetPort:
+      type: integer
+      description: "Target port"
+      default: 8080

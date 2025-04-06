@@ -1,0 +1,139 @@
+apiVersion: kro.run/v1alpha1
+kind: ResourceGraphDefinition
+metadata:
+  name: web-application
+spec:
+  description: "A simple web application with a frontend and a backend"
+  
+  parameters:
+    appName:
+      type: string
+      description: "Name of the application"
+      required: true
+    
+    namespace:
+      type: string
+      description: "Kubernetes namespace to deploy to"
+      default: "default"
+    
+    replicas:
+      type: integer
+      description: "Number of replicas for the frontend"
+      default: 2
+  
+  resources:
+    frontend:
+      type: Deployment
+      api: apps
+      version: v1
+      description: "Frontend web server"
+      template:
+        apiVersion: apps/v1
+        kind: Deployment
+        metadata:
+          name: {{ parameters.appName }}-frontend
+          namespace: {{ parameters.namespace }}
+        spec:
+          replicas: {{ parameters.replicas }}
+          selector:
+            matchLabels:
+              app: {{ parameters.appName }}-frontend
+          template:
+            metadata:
+              labels:
+                app: {{ parameters.appName }}-frontend
+            spec:
+              containers:
+              - name: webserver
+                image: nginx:latest
+                ports:
+                - containerPort: 80
+    
+    backend:
+      type: Deployment
+      api: apps
+      version: v1
+      description: "Backend API server"
+      template:
+        apiVersion: apps/v1
+        kind: Deployment
+        metadata:
+          name: {{ parameters.appName }}-backend
+          namespace: {{ parameters.namespace }}
+        spec:
+          replicas: 1
+          selector:
+            matchLabels:
+              app: {{ parameters.appName }}-backend
+          template:
+            metadata:
+              labels:
+                app: {{ parameters.appName }}-backend
+            spec:
+              containers:
+              - name: api
+                image: api-image:latest
+                ports:
+                - containerPort: 8080
+    
+    frontendService:
+      type: Service
+      api: ""
+      version: v1
+      description: "Service for the frontend"
+      template:
+        apiVersion: v1
+        kind: Service
+        metadata:
+          name: {{ parameters.appName }}-frontend
+          namespace: {{ parameters.namespace }}
+        spec:
+          selector:
+            app: {{ parameters.appName }}-frontend
+          ports:
+          - port: 80
+            targetPort: 80
+          type: ClusterIP
+    
+    backendService:
+      type: Service
+      api: ""
+      version: v1
+      description: "Service for the backend"
+      template:
+        apiVersion: v1
+        kind: Service
+        metadata:
+          name: {{ parameters.appName }}-backend
+          namespace: {{ parameters.namespace }}
+        spec:
+          selector:
+            app: {{ parameters.appName }}-backend
+          ports:
+          - port: 8080
+            targetPort: 8080
+          type: ClusterIP
+  
+  relations:
+    frontendToBackend:
+      type: communication
+      description: "Frontend communicates with backend"
+      from: frontend
+      to: backend
+      template:
+        apiVersion: networking.k8s.io/v1
+        kind: NetworkPolicy
+        metadata:
+          name: {{ parameters.appName }}-frontend-to-backend
+          namespace: {{ parameters.namespace }}
+        spec:
+          podSelector:
+            matchLabels:
+              app: {{ parameters.appName }}-backend
+          ingress:
+          - from:
+            - podSelector:
+                matchLabels:
+                  app: {{ parameters.appName }}-frontend
+            ports:
+            - port: 8080
