@@ -1,0 +1,28 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: complex-resourcegraph-sample
+  namespace: kro-system
+data:
+  description: |
+    A complex resource graph example with many interconnected resources
+    Used for performance testing of large graph operations
+
+  # Number of resources of each type to generate in test
+  scale: |
+    deployments: 50
+    services: 40
+    configmaps: 60
+    secrets: 30
+    ingresses: 10
+    statefulsets: 5
+    daemonsets: 3
+    persistentvolumeclaims: 15
+    
+  # Relationship distribution (percentages)
+  relationships: |
+    exposedBy: 70     # Percentage of deployments exposed by services
+    configuredBy: 80  # Percentage of deployments configured by configmaps
+    routedBy: 40      # Percentage of services routed by ingresses
+    secretsUsedBy: 50 # Percentage of deployments using secrets
+    dependsOn: 30     # Percentage of resources depending on other resources
