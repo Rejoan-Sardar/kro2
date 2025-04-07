@@ -1,0 +1,51 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: simple-resourcegraph-sample
+  namespace: kro-system
+data:
+  description: |
+    A simple resource graph example with a few connected resources
+    Used for basic performance testing of graph operations
+
+  # Example resource graph in YAML format
+  graph: |
+    nodes:
+      - name: frontend-deployment
+        kind: Deployment
+        apiVersion: apps/v1
+        namespace: default
+        uid: d84fa317-3c10-45ca-bc21-5c5a2c5e1234
+      - name: frontend-service
+        kind: Service
+        apiVersion: v1
+        namespace: default
+        uid: 7e2c8f45-3f1d-4bde-9d7b-6b5e3de5678
+      - name: frontend-config
+        kind: ConfigMap
+        apiVersion: v1
+        namespace: default
+        uid: bd2f7c3a-4e1f-48bc-a0a2-4a1c6c3e9876
+      - name: frontend-ingress
+        kind: Ingress
+        apiVersion: networking.k8s.io/v1
+        namespace: default
+        uid: fe4c5d3b-5a2b-4a9c-b1a2-3a4b5c6d7e8f
+      - name: database-statefulset
+        kind: StatefulSet
+        apiVersion: apps/v1
+        namespace: default
+        uid: ea5d6c7b-8d9e-4a5b-6c7d-8e9f0a1b2c3d
+    edges:
+      - from: frontend-deployment
+        to: frontend-service
+        relationship: "exposedBy"
+      - from: frontend-service
+        to: frontend-ingress
+        relationship: "routedBy"
+      - from: frontend-deployment
+        to: frontend-config
+        relationship: "configuredBy"
+      - from: frontend-deployment
+        to: database-statefulset
+        relationship: "dependsOn"
