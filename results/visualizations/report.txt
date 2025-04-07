@@ -1,0 +1,19 @@
+KRO Performance Benchmark Report
+================================
+
+CRUD Operations:
+- Create: 424 ops/sec (avg latency: 21.3ms)
+- Read: 892 ops/sec (avg latency: 4.2ms)
+- Update: 378 ops/sec (avg latency: 23.5ms)
+- Delete: 521 ops/sec (avg latency: 15.7ms)
+
+CEL Expressions:
+- Simple: 9876 evals/sec
+- Medium: 5433 evals/sec
+- Complex: 1257 evals/sec
+
+Resource Graph:
+- Small (5 nodes): 8762 ops/sec
+- Medium (15 nodes): 3241 ops/sec
+- Large (30 nodes): 1287 ops/sec
+

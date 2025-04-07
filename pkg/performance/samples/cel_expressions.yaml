@@ -1,0 +1,30 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: cel-expressions-samples
+  namespace: kro-system
+data:
+  # Simple expressions
+  simple_expressions: |
+    - 'true'
+    - 'false'
+    - '5 > 3'
+    - '"hello" + " world"'
+    - 'size([1, 2, 3]) == 3'
+    - 'resource.metadata.name.startsWith("test-")'
+    - 'has(resource.spec.replicas) && resource.spec.replicas > 0'
+
+  # Medium complexity expressions
+  medium_expressions: |
+    - 'resource.metadata.labels["app"] == "frontend" && resource.spec.replicas > 2'
+    - 'resource.status.conditions.exists(c, c.type == "Ready" && c.status == "True")'
+    - 'resource.spec.containers.all(c, c.resources.requests.has("memory"))'
+    - 'resource.spec.template.spec.containers.exists(c, c.image.contains("latest"))'
+    - 'resource.metadata.annotations["kubernetes.io/change-cause"] != "" ? true : false'
+
+  # Complex expressions
+  complex_expressions: |
+    - 'resource.spec.containers.filter(c, c.resources.limits.exists(name, value, name == "cpu" && int(value.replace("m", "")) > 500)).size() > 0'
+    - 'resource.status.conditions.filter(c, c.type in ["Ready", "Available", "Progressing"]).map(c, {"type": c.type, "ready": c.status == "True"}).exists(s, s.ready == false)'
+    - 'resource.spec.template.spec.containers.exists(c, resource.metadata.labels.exists(label, key, label.startsWith("app") && c.env.exists(e, e.name == "APP_TYPE" && e.value == key)))'
+    - 'resource.status.replicas == resource.status.readyReplicas && resource.status.replicas > 0 && resource.spec.selector.matchLabels.all(label, key, resource.metadata.labels[key] == label)'

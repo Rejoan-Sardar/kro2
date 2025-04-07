@@ -1,0 +1,41 @@
+{
+  "timestamp": "2025-04-07T12:53:55Z",
+  "benchmarks": [
+    {
+      "name": "CRUD",
+      "operations": [
+        {"type": "Create", "opsPerSec": 424, "p95LatencyMs": 16.8},
+        {"type": "Read", "opsPerSec": 892, "p95LatencyMs": 9.2},
+        {"type": "Update", "opsPerSec": 582, "p95LatencyMs": 14.5},
+        {"type": "Delete", "opsPerSec": 726, "p95LatencyMs": 11.4}
+      ],
+      "overall": {"opsPerSec": 658, "p95LatencyMs": 12.5, "cpuUsage": 45.2, "memoryMB": 128.5}
+    },
+    {
+      "name": "CEL",
+      "operations": [
+        {"complexity": "Simple", "opsPerSec": 9821, "p95LatencyMs": 0.9},
+        {"complexity": "Medium", "opsPerSec": 4876, "p95LatencyMs": 1.8},
+        {"complexity": "Complex", "opsPerSec": 1246, "p95LatencyMs": 7.2},
+        {"complexity": "VeryComplex", "opsPerSec": 789, "p95LatencyMs": 11.6}
+      ],
+      "overall": {"opsPerSec": 5433, "p95LatencyMs": 3.2, "cpuUsage": 62.0, "memoryMB": 95.7}
+    },
+    {
+      "name": "ResourceGraph",
+      "operations": [
+        {"size": "Small", "nodes": 10, "opsPerSec": 246, "p95LatencyMs": 18.2, "memoryMB": 105.3},
+        {"size": "Medium", "nodes": 30, "opsPerSec": 148, "p95LatencyMs": 28.6, "memoryMB": 257.2},
+        {"size": "Large", "nodes": 50, "opsPerSec": 92, "p95LatencyMs": 42.1, "memoryMB": 389.5}
+      ],
+      "overall": {"opsPerSec": 148, "p95LatencyMs": 28.6, "cpuUsage": 79.0, "memoryMB": 257.2}
+    }
+  ],
+  "scaling": [
+    {"workers": 1, "opsPerSec": 219, "cpuUsage": 21.8},
+    {"workers": 2, "opsPerSec": 412, "cpuUsage": 38.5},
+    {"workers": 4, "opsPerSec": 658, "cpuUsage": 45.2},
+    {"workers": 8, "opsPerSec": 872, "cpuUsage": 72.6},
+    {"workers": 16, "opsPerSec": 983, "cpuUsage": 92.4}
+  ]
+}

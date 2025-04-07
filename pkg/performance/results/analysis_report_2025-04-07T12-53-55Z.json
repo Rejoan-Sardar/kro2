@@ -1,0 +1,57 @@
+{
+  "timestamp": "2025-04-07T12:53:55Z",
+  "source_data": "benchmark_results.json",
+  "source_size": 1718,
+  "summary": {
+    "totalOps": 10000,
+    "totalDuration": 15.3,
+    "avgOpsPerSec": 658.2,
+    "p95Latency": 12.5,
+    "maxLatency": 45.8,
+    "errorRate": 0.05,
+    "cpuUsage": 45.2,
+    "memoryUsage": 128.5
+  },
+  "insights": [
+    {
+      "type": "performance",
+      "description": "CRUD operations achieved 658 ops/sec with 4 workers",
+      "severity": "info"
+    },
+    {
+      "type": "performance",
+      "description": "CEL expressions evaluated at 5433 ops/sec",
+      "severity": "info"
+    },
+    {
+      "type": "performance",
+      "description": "ResourceGraph operations processed at 148 ops/sec",
+      "severity": "info"
+    },
+    {
+      "type": "resource",
+      "description": "CEL evaluation is CPU-efficient (62% utilization)",
+      "severity": "info"
+    },
+    {
+      "type": "resource",
+      "description": "ResourceGraph operations are CPU and memory intensive (79% CPU, 257MB)",
+      "severity": "warning"
+    },
+    {
+      "type": "bottleneck",
+      "description": "Create operations (424 ops/sec) are slower than read operations (892 ops/sec)",
+      "severity": "info"
+    },
+    {
+      "type": "bottleneck",
+      "description": "Complex CEL expressions (1246 ops/sec) are 7.8x slower than simple expressions (9821 ops/sec)",
+      "severity": "warning"
+    },
+    {
+      "type": "scaling",
+      "description": "Performance scales well up to 4 workers, with diminishing returns beyond that",
+      "severity": "info"
+    }
+  ]
+}
